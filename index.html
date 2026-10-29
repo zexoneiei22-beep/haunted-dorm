@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#0b0c10">
+<title>หอพักผีสิง ออนไลน์</title>
+<style>
+:root{--bg:#0b0c10;--panel:#15171f;--panel2:#1c1f2a;--line:#292d3b;--txt:#e9eaf0;--mut:#8b90a3;--red:#ff4d5e;--gold:#ffcf5a;--cy:#7ee8ff;--ok:#62e39a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font-family:"Mali","Sarabun","Noto Sans Thai",system-ui,-apple-system,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none}
+button,input,select{font:inherit;color:inherit}
+#app{position:fixed;inset:0;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;overflow:auto;padding:16px}
+.screen.on{display:flex}
+#s-game{padding:0;overflow:hidden}
+h1{margin:0;font-size:30px;letter-spacing:1px}
+h2{margin:0 0 8px;font-size:17px}
+.logo{text-align:center;margin:18px 0 14px}
+.logo .g{font-size:54px;filter:drop-shadow(0 0 14px #ff4d5e88);animation:fl 3s infinite}
+.logo h1{color:#fff;text-shadow:0 0 18px #ff4d5e66}
+.logo p{margin:4px 0 0;color:var(--mut);font-size:13px}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin:0 auto 12px;width:100%;max-width:460px}
+.tabs{display:flex;gap:6px;margin-bottom:10px}
+.tab{flex:1;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);text-align:center;cursor:pointer;color:var(--mut)}
+.tab.on{background:var(--red);border-color:var(--red);color:#fff;font-weight:700}
+input[type=text],input[type=password],input[type=search],input:not([type]),select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#0e1016;margin-bottom:8px;outline:none;user-select:text;-webkit-user-select:text}
+input:focus,select:focus{border-color:var(--cy)}
+.btn{display:block;width:100%;padding:12px;border-radius:12px;border:0;background:var(--red);color:#fff;font-weight:700;cursor:pointer;margin-bottom:8px;font-size:15px}
+.btn:active{transform:scale(.98)}
+.btn.sec{background:var(--panel2);border:1px solid var(--line);color:var(--txt);font-weight:600}
+.btn.gold{background:var(--gold);color:#2a1f00}
+.btn.sm{display:inline-block;width:auto;padding:6px 12px;margin:0 0 0 6px;font-size:13px;border-radius:9px}
+.btn[disabled]{opacity:.45}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{margin-bottom:0}
+.chk{display:flex;gap:8px;align-items:center;color:var(--mut);font-size:14px;margin:2px 0 10px}
+.chk input{width:18px;height:18px}
+.err{color:#ff8892;min-height:20px;font-size:14px;margin-bottom:6px}
+.mut{color:var(--mut);font-size:13px}
+.prof{display:flex;gap:12px;align-items:center}
+.av{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-size:24px;font-weight:800;color:#fff;flex:none;box-shadow:inset 0 0 0 3px #ffffff22}
+.uid{font-family:ui-monospace,Menlo,monospace;letter-spacing:2px;color:var(--cy);font-size:17px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#555;margin-right:7px}
+.dot.on{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.list .it{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}
+.list .it:last-child{border:0}
+.list .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.code{font-size:44px;font-weight:800;letter-spacing:8px;text-align:center;color:var(--gold);text-shadow:0 0 16px #ffcf5a55}
+.pl{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:6px 12px;margin:0 6px 6px 0}
+.mapopt{display:flex;gap:8px;flex-wrap:wrap}
+.mapopt .m{flex:1 1 130px;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--panel2);cursor:pointer}
+.mapopt .m.on{border-color:var(--gold);background:#2a2412}
+.mapopt .m b{display:block}
+.mapopt .m small{color:var(--mut)}
+.badge{position:fixed;top:calc(8px + env(safe-area-inset-top));right:10px;font-size:12px;padding:4px 10px;border-radius:12px;background:#000a;color:var(--mut);z-index:50;pointer-events:none}
+.badge.ok{color:var(--ok)}
+#toasts{position:fixed;left:0;right:0;top:calc(10px + env(safe-area-inset-top));display:flex;flex-direction:column;align-items:center;gap:6px;z-index:80;pointer-events:none}
+.toast{background:#000d;border:1px solid var(--line);padding:8px 16px;border-radius:20px;font-size:14px;animation:ti .25s;max-width:90%}
+.toast.bad{border-color:var(--red);color:#ffb3ba}
+@keyframes ti{from{opacity:0;transform:translateY(-8px)}}
+.modal{position:fixed;inset:0;background:#000a;display:none;place-items:center;z-index:90;padding:20px}
+.modal.on{display:grid}
+.modal .card{margin:0;animation:ti .2s}
+/* game */
+#hud{display:flex;gap:8px;align-items:center;padding:6px 10px;background:#0009;border-bottom:1px solid var(--line);flex:none;min-height:44px}
+#hud .hb{border:1px solid var(--line);background:var(--panel2);border-radius:10px;padding:6px 10px;cursor:pointer;font-size:14px}
+#dawn{flex:1;min-width:70px}
+#dawn .bar{height:8px;border-radius:5px;background:#222634;overflow:hidden}
+#dawn .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#4a3a8c,#ff9a5a,#ffe08a)}
+#dawn small{color:var(--mut);font-size:11px}
+#coins{font-weight:800;color:var(--gold);font-size:18px;white-space:nowrap}
+#coins small{font-size:11px;color:var(--mut);font-weight:500;margin-left:4px}
+#gbody{flex:1;display:flex;flex-direction:column;min-height:0}
+#stage{flex:1;position:relative;min-height:0;background:#000}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+#panel{flex:none;background:var(--panel);border-top:1px solid var(--line);padding:8px;display:flex;flex-direction:column;gap:6px;max-height:42%;overflow:auto}
+#panel .r{display:flex;gap:6px;flex-wrap:wrap}
+#panel .hint{color:var(--mut);font-size:14px;text-align:center;padding:10px}
+.act{flex:1 1 90px;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:7px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:13px}
+.act small{color:var(--gold);font-size:12px}
+.act.can{border-color:#ffcf5a88}
+.act.sel{outline:2px solid var(--cy)}
+.act[disabled]{opacity:.4}
+@media (orientation:landscape) and (max-height:520px){
+  #gbody{flex-direction:row}
+  #panel{width:232px;max-height:none;border-top:0;border-left:1px solid var(--line)}
+  #hud{min-height:38px;padding:3px 8px}
+}
+#result{position:absolute;inset:0;background:#000b;display:none;place-items:center;z-index:20;padding:16px}
+#result.on{display:grid}
+#result .card{text-align:center;animation:ti .3s}
+#result h2{font-size:24px}
+.rot{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:12px;color:#ffffffaa;pointer-events:none;display:none}
+@media (orientation:portrait){.rot{display:block}}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <section id="s-auth" class="screen on">
+    <div class="logo"><div class="g">👻</div><h1>หอพักผีสิง</h1><p>ออนไลน์ · นอนหาเหรียญ สร้างป้อม รอดให้ถึงรุ่งสาง</p></div>
+    <form class="card" id="authForm" autocomplete="on">
+      <div class="tabs"><div class="tab on" data-m="login">เข้าสู่ระบบ</div><div class="tab" data-m="register">สมัครสมาชิก</div></div>
+      <input id="aName" name="username" type="text" placeholder="ชื่อผู้เล่น (3-16 ตัวอักษร)" maxlength="16" autocomplete="username" autocapitalize="off" spellcheck="false">
+      <input id="aPass" name="password" type="password" placeholder="รหัสผ่าน (อย่างน้อย 4 ตัว)" maxlength="64" autocomplete="current-password">
+      <label class="chk"><input type="checkbox" id="aRemember" checked> จดจำชื่อและเข้าสู่ระบบอัตโนมัติ</label>
+      <div class="err" id="aErr"></div>
+      <button class="btn" id="aGo" type="submit">เข้าสู่ระบบ</button>
+      <button class="btn sec" id="aGuest" type="button">เล่นคนเดียวแบบแขก (ไม่ต้องสมัคร)</button>
+    </form>
+    <div class="mut" id="aNote" style="text-align:center"></div>
+  </section>
+
+  <section id="s-home" class="screen">
+    <div class="card">
+      <div class="prof">
+        <div class="av" id="hAv">?</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:19px;font-weight:700" id="hName">-</div>
+          <div class="mut">UID <span class="uid" id="hUid">--------</span></div>
+        </div>
+        <button class="btn sec sm" id="hCopy">คัดลอก</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>เลือกแมพ</h2>
+      <div class="mapopt" id="hMaps"></div>
+    </div>
+    <div class="card">
+      <button class="btn gold" id="hSolo">🎮 เล่นคนเดียว</button>
+      <button class="btn" id="hCreate">🏠 สร้างห้อง (เล่นกับเพื่อน)</button>
+      <div class="row"><input id="hCode" placeholder="รหัสห้อง 4 ตัว" maxlength="4" autocapitalize="characters" style="text-transform:uppercase"><button class="btn sec" id="hJoin" style="width:90px">เข้าห้อง</button></div>
+    </div>
+    <div class="card">
+      <h2>👥 เพื่อน</h2>
+      <div class="row"><input id="fUid" inputmode="numeric" placeholder="ใส่ UID 8 หลักของเพื่อน" maxlength="8"><button class="btn sec" id="fAdd" style="width:90px">เพิ่ม</button></div>
+      <div id="fReq"></div>
+      <div class="list" id="fList"></div>
+    </div>
+    <div class="card row" style="justify-content:space-between">
+      <button class="btn sec" id="hHow" style="margin:0;width:auto;padding:10px 16px">❓ วิธีเล่น</button>
+      <button class="btn sec" id="hOut" style="margin:0;width:auto;padding:10px 16px">ออกจากระบบ</button>
+    </div>
+  </section>
+
+  <section id="s-room" class="screen">
+    <div class="card">
+      <div class="mut" style="text-align:center">รหัสห้อง</div>
+      <div class="code" id="rCode">----</div>
+      <div class="row" style="margin-top:8px"><button class="btn sec" id="rCopy" style="margin:0">คัดลอกลิงก์เชิญ</button></div>
+    </div>
+    <div class="card"><h2>ผู้เล่นในห้อง (<span id="rCnt">0</span>/4)</h2><div id="rPlayers"></div></div>
+    <div class="card"><h2>แมพ</h2><div class="mapopt" id="rMaps"></div><div class="mut" id="rMapNote" style="margin-top:6px"></div></div>
+    <div class="card"><h2>เชิญเพื่อน</h2><div class="list" id="rFriends"></div></div>
+    <div class="card">
+      <button class="btn" id="rStart">▶ เริ่มเกม</button>
+      <button class="btn sec" id="rLeave">ออกจากห้อง</button>
+    </div>
+  </section>
+
+  <section id="s-game" class="screen">
+    <div id="hud">
+      <button class="hb" id="gExit">✕</button>
+      <div id="dawn"><div class="bar"><i></i></div><small id="dawnTxt">--:--</small></div>
+      <div id="coins">🪙 0<small></small></div>
+      <button class="hb" id="gPause">⏸</button>
+      <button class="hb" id="gMute">🔊</button>
+    </div>
+    <div id="gbody">
+      <div id="stage"><canvas id="cv"></canvas><div class="rot">📱 หมุนจอเป็นแนวนอนจะเล่นง่ายกว่า</div>
+        <div id="result"><div class="card" id="resCard"></div></div>
+      </div>
+      <div id="panel"></div>
+    </div>
+  </section>
+</div>
+
+<div class="badge" id="badge">กำลังเชื่อมต่อ…</div>
+<div id="toasts"></div>
+<div class="modal" id="mInvite"><div class="card" style="max-width:340px;text-align:center"><h2 id="mIvT">คำเชิญ</h2><p class="mut" id="mIvP"></p><button class="btn" id="mIvY">เข้าร่วม</button><button class="btn sec" id="mIvN">ไม่ตอนนี้</button></div></div>
+<div class="modal" id="mHow"><div class="card" style="max-width:420px"><h2>วิธีเล่น</h2>
+<div class="mut" style="line-height:1.7;font-size:14px">
+1. ช่วงแรกแตะ <b>ห้องว่าง</b> เพื่อเลือกห้องนอน<br>
+2. คุณนอนอยู่บนเตียง <b>ได้เหรียญ 🪙 อัตโนมัติ</b> อัปเกรดเตียงเพื่อเพิ่มรายได้<br>
+3. ผีจะเดินมาทุบ <b>ประตู</b> — อัปเกรดประตู ซ่อมประตู<br>
+4. วางและอัปเกรด <b>ป้อม</b> (แตะช่องว่างข้างประตู) เพื่อยิงผี<br>
+5. ถ้าประตูแตก ผีจะเข้าไปจับคุณ — ทุกคนรอดจนถึง <b>รุ่งสาง</b> = ชนะ<br>
+6. เล่นกับเพื่อน: สมัคร → เพิ่มเพื่อนด้วย UID → สร้างห้อง → เชิญ</div>
+<button class="btn" id="mHowX" style="margin-top:12px">เข้าใจแล้ว</button></div></div>
+
+<script src="sim.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

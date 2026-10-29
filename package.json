@@ -1,0 +1,10 @@
+{
+  "name": "haunted-dorm-online",
+  "version": "1.0.0",
+  "description": "Co-op ghost-survival dorm game with accounts, friends and rooms",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": { "node": ">=16" }
+}
