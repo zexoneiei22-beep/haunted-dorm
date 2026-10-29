@@ -9,7 +9,7 @@ const Sim = require('./sim.js');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC = __dirname;
-const ALLOWED = new Set(['/index.html', '/game.js', '/sim.js']);
+const ALLOWED = new Set(['/index.html', '/game.js', '/sim.js', '/render3d.js']);
 const DATA_FILE = process.env.DATA_FILE || path.join(__dirname, 'data.json');
 
 /* ---------------------------------------------------------------- storage */

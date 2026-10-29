@@ -548,6 +548,7 @@
 
   function render() {
     const g = st.game; if (!g || !view.w) return;
+    if (window.R3D && R3D.render(g, { st, fx, gv, S, avColor })) return; // 3D renderer (falls back to 2D below)
     const th = S.MAPS[g.map].theme, c = ctx, d = view.dpr;
     c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = '#000'; c.fillRect(0, 0, cv.width, cv.height);
     const sx = fx.shake ? (Math.random() - 0.5) * fx.shake : 0, sy = fx.shake ? (Math.random() - 0.5) * fx.shake : 0;
@@ -609,7 +610,9 @@
   /* =============================================================== input + panel */
   cv.addEventListener('pointerdown', (e) => {
     const g = st.game; if (!g || g.phase === 'over' || st.paused) return;
-    const r = cv.getBoundingClientRect(), x = (e.clientX - r.left - view.ox) / view.s, y = (e.clientY - r.top - view.oy) / view.s;
+    let x, y;
+    if (window.R3D && R3D.ok) { const q = R3D.pick(e.clientX, e.clientY); if (!q) return; x = q.x; y = q.y; }
+    else { const r = cv.getBoundingClientRect(); x = (e.clientX - r.left - view.ox) / view.s; y = (e.clientY - r.top - view.oy) / view.s; }
     if (g.phase === 'pick') {
       const room = g.rooms.find((q) => x >= q.x && x <= q.x + q.w && y >= q.y && y <= q.y + q.h);
       if (room && room.owner === null) act({ a: 'claim', room: room.id }); else if (room) Snd.deny();
